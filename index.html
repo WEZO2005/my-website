@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> ★ WEZO ★ </title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      background: #0f0f0f;
+      color: #e0e0e0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 40px 10px;
+      transition: background 0.8s ease, color 0.8s ease;
+    }
+
+    body.light-mode {
+      background: #f2f2f2;
+      color: #111111;
+    }
+
+    h1 {
+      color: #ffffff;
+      margin-bottom: 10px;
+      font-size: clamp(28px, 6vw, 42px);
+      min-height: 1.3em;
+      transition: color 0.8s ease;
+    }
+
+    body.light-mode h1 { color: #000000; }
+
+    h2 { margin: 20px 0; color: #cccccc; transition: color 0.8s ease; }
+    body.light-mode h2 { color: #000000; }
+
+    p { color: #bdbdbd; margin: 6px 0; font-size: clamp(14px, 4vw, 18px); transition: color 0.8s ease; }
+    body.light-mode p { color: #222222; }
+
+    a { color: #ff0c0c; text-decoration: none; font-weight: bold; }
+
+    img {
+      width: min(200px, 60vw);
+      height: min(200px, 60vw);
+      border-radius: 50%;
+      margin: 20px 0;
+      object-fit: cover;
+      border: 3px solid #666666;
+      transition: border 0.8s ease;
+    }
+    body.light-mode img { border-color: #000000; }
+
+    nav a { margin: 0 10px; font-size: clamp(14px, 4vw, 18px); }
+
+    #themeIcon { position: fixed; top: 15px; left: 15px; font-size: 28px; cursor: pointer; transition: transform 0.6s ease; z-index: 1000; }
+    .rotate { transform: rotate(360deg); }
+
+    #langToggle {
+      position: fixed; top: 60px; left: 15px;
+      font-size: 14px; padding: 6px 10px; border: 1px solid #666; border-radius: 6px;
+      cursor: pointer; color: #ccc; user-select: none;
+    }
+    body.light-mode #langToggle { color: #000; border-color: #000; }
+  </style>
+</head>
+
+<body>
+
+  <div id="themeIcon">🌙</div>
+  <div id="langToggle">EN</div>
+
+  <h1 id="typing"></h1>
+
+  <img src="profile.jpg" alt="زياد">
+
+  <nav>
+    <a href="index.html" id="homeLink"></a> |
+    <a href="about.html" id="aboutLink"></a>
+  </nav>
+
+  <p id="bio1"></p>
+  <p id="bio2"></p>
+
+  <h2 id="clock"></h2>
+
+  <p id="personalSite"></p>
+  <p id="instagramLink"></p>
+
+  <script>
+    const textAr = "أهلاً يا صديقي 👋";
+    const textEn = "Welcome, my friend 👋";
+    let i = 0;
+    const typing = document.getElementById("typing");
+    let currentLang = "ar";
+
+    const content = {
+      ar: {
+        homeLink: "الرئيسية",
+        aboutLink: "عن زياد",
+        bio1: "أنا زياد، طالب وعندي اهتمام بالبرمجة وتصميم المواقع 💻",
+        bio2: "هوايتي الجيمينج واستكشاف كل جديد في عالم التقنية 🎮",
+        personalSite: "ده موقع شخصي ♥",
+        instagramLink: 'تابعني على <a href="https://instagram.com/scorpio_forever_2005" target="_blank">إنستجرام</a>'
+      },
+      en: {
+        homeLink: "Home",
+        aboutLink: "About ZEAD",
+        bio1: "I'm ZEAD, a student interested in programming and web design 💻",
+        bio2: "I love gaming and exploring everything new in tech 🎮",
+        personalSite: "This is my personal site ♥",
+        instagramLink: 'Follow me on <a href="https://instagram.com/scorpio_forever_2005" target="_blank">Instagram</a>'
+      }
+    };
+
+    function typeEffect() {
+      let text = currentLang === "ar" ? textAr : textEn;
+      if (i < text.length) {
+        typing.innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeEffect, 80);
+      }
+    }
+
+    function updateContent() {
+      document.getElementById("bio1").innerHTML = content[currentLang].bio1;
+      document.getElementById("bio2").innerHTML = content[currentLang].bio2;
+      document.getElementById("homeLink").innerText = content[currentLang].homeLink;
+      document.getElementById("aboutLink").innerText = content[currentLang].aboutLink;
+      document.getElementById("personalSite").innerHTML = content[currentLang].personalSite;
+      document.getElementById("instagramLink").innerHTML = content[currentLang].instagramLink;
+
+      document.body.style.direction = currentLang === "ar" ? "rtl" : "ltr";
+      typing.innerHTML = "";
+      i = 0;
+      typeEffect();
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const h = now.getHours().toString().padStart(2, '0');
+      const m = now.getMinutes().toString().padStart(2, '0');
+      const s = now.getSeconds().toString().padStart(2, '0');
+      document.getElementById("clock").innerText = `${h}:${m}:${s}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    const icon = document.getElementById("themeIcon");
+    icon.onclick = () => {
+      document.body.classList.toggle("light-mode");
+      icon.classList.add("rotate");
+      setTimeout(() => icon.classList.remove("rotate"), 600);
+      icon.textContent = document.body.classList.contains("light-mode") ? "☀️" : "🌙";
+    };
+
+    const langBtn = document.getElementById("langToggle");
+    langBtn.onclick = () => {
+      currentLang = currentLang === "ar" ? "en" : "ar";
+      langBtn.innerText = currentLang === "ar" ? "EN" : "AR";
+      updateContent();
+    };
+
+    updateContent();
+  </script>
+
+</body>
+</html>
